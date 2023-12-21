@@ -13,7 +13,16 @@ export default function App() {
         <span className={"block"}>r: {debug.getMagnitude().toFixed(2)}</span>
       </div>
       <div className={"flex h-screen w-screen items-center justify-center"}>
-        <MagneticButton onDebugChange={setDebug}>Cool Button</MagneticButton>
+        <MagneticButton
+          onDebugChange={setDebug}
+          classNames={{
+            button:
+              "bg-yellow-600 shadow-yellow-800 shadow-[0_0_64px_0px] hover:shadow-[0_0_128px_30px] hover:shadow-yellow-800 transition-shadow",
+            text: "text-white",
+          }}
+        >
+          Boing
+        </MagneticButton>
       </div>
     </main>
   );

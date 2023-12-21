@@ -25,14 +25,14 @@ const defaults: {
   },
 };
 
-interface MagneticButtonProps {
+interface MagneticButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "className"> {
   children: React.ReactNode;
   onDebugChange?: (vector: Vector2D) => void;
   buttonOpts?: MotionOpts;
   textOpts?: MotionOpts;
   classNames?: {
-    button: string;
-    text: string;
+    button?: string;
+    text?: string;
   };
 }
 
@@ -42,6 +42,7 @@ export default function MagneticButton({
   buttonOpts,
   textOpts,
   classNames,
+  ...buttonProps
 }: Readonly<MagneticButtonProps>) {
   function handleDebugUpdate(normalized: Vector2D) {
     if (onDebugChange) {
@@ -95,6 +96,7 @@ export default function MagneticButton({
       className={cn("flex h-48 w-48 items-center justify-center rounded-full bg-white", classNames?.button)}
       onMouseMove={magnetize}
       onMouseLeave={demagnetize}
+      {...buttonProps}
     >
       <span ref={text} className={cn("block font-bold text-black", classNames?.text)}>
         {children}
