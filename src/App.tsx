@@ -17,7 +17,7 @@ export default function App() {
           onDebugChange={setDebug}
           classNames={{
             button:
-              "bg-yellow-600 shadow-yellow-800 shadow-[0_0_64px_0px] hover:shadow-[0_0_128px_30px] hover:shadow-yellow-800 transition-shadow",
+              "bg-lime-500 shadow-lime-800 shadow-[0_0_64px_0px] hover:shadow-[0_0_128px_30px] hover:shadow-lime-800 transition-shadow",
             text: "text-white",
           }}
         >
