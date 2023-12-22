@@ -78,6 +78,10 @@ export default function Parallax({ influence, offset }: Readonly<{ influence: nu
     };
   });
 
+  function getImage(key: string) {
+    return new URL(`/src/assets/images/parallax-sky-${key}.png`, import.meta.url).href;
+  }
+
   return (
     <main className="h-[200vh]">
       <div ref={wrapper} className={"relative h-[75vh] w-full lg:h-[calc(100vh+80px)]"}>
@@ -90,7 +94,7 @@ export default function Parallax({ influence, offset }: Readonly<{ influence: nu
             )}
             key={key}
             alt="Parallax images"
-            src={`/src/assets/images/parallax-sky-${key}.png`}
+            src={getImage(key)}
             data-speed={speed}
           />
         ))}
