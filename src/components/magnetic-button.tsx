@@ -1,4 +1,4 @@
-import React, { MouseEvent, useRef } from "react";
+import React, { MouseEvent, MouseEventHandler, useRef } from "react";
 import gsap, { Elastic, Power4 } from "gsap";
 import { Vector2D, getNormalizedDistanceFromCenter2D } from "../lib/linear-algebra/vectors";
 import { cn } from "../lib/tailwind/utils";
@@ -30,6 +30,8 @@ interface MagneticButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButton
   onDebugChange?: (vector: Vector2D) => void;
   buttonOpts?: MotionOpts;
   textOpts?: MotionOpts;
+  onMouseMove?: MouseEventHandler;
+  onMouseLeave?: MouseEventHandler;
   classNames?: {
     button?: string;
     text?: string;
@@ -42,6 +44,8 @@ export default function MagneticButton({
   buttonOpts,
   textOpts,
   classNames,
+  onMouseMove,
+  onMouseLeave,
   ...buttonProps
 }: Readonly<MagneticButtonProps>) {
   function handleDebugUpdate(normalized: Vector2D) {
@@ -87,6 +91,20 @@ export default function MagneticButton({
     gsapDemagnetize(text.current!, { ...defaults.textOpts, ...textOpts });
   }
 
+  function handleMouseMove(event: MouseEvent) {
+    magnetize(event);
+    if (onMouseMove) {
+      onMouseMove(event);
+    }
+  }
+
+  function handleMouseLeave(event: MouseEvent) {
+    demagnetize();
+    if (onMouseLeave) {
+      onMouseLeave(event);
+    }
+  }
+
   const button = useRef<HTMLButtonElement>(null);
   const text = useRef<HTMLSpanElement>(null);
 
@@ -94,8 +112,8 @@ export default function MagneticButton({
     <button
       ref={button}
       className={cn("flex h-48 w-48 items-center justify-center rounded-full bg-white", classNames?.button)}
-      onMouseMove={magnetize}
-      onMouseLeave={demagnetize}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
       {...buttonProps}
     >
       <span ref={text} className={cn("block font-bold text-black", classNames?.text)}>
