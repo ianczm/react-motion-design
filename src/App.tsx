@@ -1,39 +1,47 @@
-import { useState } from "react";
-import MagneticButton from "./components/magnetic-button";
-import { Vector2D } from "./lib/linear-algebra/vectors";
+import { Link } from "react-router-dom";
+import parallaxImg from "/src/assets/images/parallax-sky-full.png";
+import magnetImg from "/src/assets/images/magnet-thumbnail.png";
 import { cn } from "./lib/tailwind/utils";
-import { useNavigate } from "react-router-dom";
+
+const options = [
+  {
+    id: 1,
+    text: "Parallax",
+    path: "/parallax",
+    image: parallaxImg,
+    dark: true,
+  },
+  {
+    id: 2,
+    text: "Magnet",
+    path: "/magnet",
+    image: magnetImg,
+    dark: true,
+  },
+];
 
 export default function App() {
-  const [debug, setDebug] = useState(Vector2D.of(0, 0));
-  const [isBgActive, setIsBgActive] = useState(false);
-  const navigate = useNavigate();
-
-  function handleClick() {
-    navigate("/parallax");
-  }
-
   return (
-    <main className={cn("relative transition-colors duration-500", isBgActive ? "bg-[#0b1104]" : "bg-black")}>
-      <div className={"absolute flex flex-col p-4"}>
-        <span className={"block"}>x: {debug.x.toFixed(2)}</span>
-        <span className={"block"}>y: {debug.y.toFixed(2)}</span>
-        <span className={"block"}>r: {debug.getMagnitude().toFixed(2)}</span>
-      </div>
-      <div className={"flex h-screen w-screen items-center justify-center"}>
-        <MagneticButton
-          onDebugChange={setDebug}
-          onMouseMove={() => setIsBgActive(true)}
-          onMouseLeave={() => setIsBgActive(false)}
-          onClick={handleClick}
-          classNames={{
-            button:
-              "bg-lime-500 shadow-lime-800 shadow-[0_0_64px_0px] hover:shadow-[0_0_128px_30px] hover:shadow-lime-800 transition-shadow h-60 w-60",
-            text: "text-white",
-          }}
-        >
-          Activate Parallax
-        </MagneticButton>
+    <main className={"h-screen bg-black transition-colors duration-500"}>
+      <div className={"h-[100%]"}>
+        <div className={"flex h-[30%] flex-col justify-center p-16 lg:h-[40%] lg:justify-end lg:gap-2 lg:p-32"}>
+          <h1 className={"w-max text-xl font-bold uppercase tracking-widest text-[#fff] lg:text-3xl"}>
+            React Motion Design
+          </h1>
+          <Link to={"https://github.com/ianczm"} className={"text-md w-max uppercase tracking-widest"}>
+            github.com/ianczm
+          </Link>
+        </div>
+        <div className={"grid h-[70%] grid-rows-2 lg:h-[60%] lg:grid-cols-2 lg:grid-rows-none"}>
+          {options.map((option) => (
+            <Link key={option.id} to={option.path} className={"relative block h-full"}>
+              <img src={option.image} alt="" className={"block h-full w-full object-cover"} />
+              <div className={"absolute bottom-0 left-0 right-0 top-0 flex items-end justify-start p-16"}>
+                <h2 className={cn("text-xl font-bold", option.dark ? "text-white" : "text-black")}>{option.text}</h2>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </main>
   );
