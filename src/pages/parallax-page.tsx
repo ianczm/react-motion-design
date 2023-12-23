@@ -1,6 +1,7 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useEffect, useRef } from "react";
+import { easeOutQuart } from "../lib/easings/easings";
 import { cn } from "../lib/tailwind/utils";
 import SmoothScroll from "../providers/SmoothScroll";
 
@@ -34,6 +35,10 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
   const titleText = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    gsap.config({
+      force3D: true,
+    });
+
     gsap.registerPlugin(ScrollTrigger);
 
     const tl = gsap.timeline({
@@ -48,26 +53,14 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
     const images = wrapper.current?.querySelectorAll("img");
     images?.forEach((image) => {
       const speed = parseInt(image.dataset.speed!);
-      tl.to(
-        image,
-        {
-          y: influence * (speed + offset),
-          duration: 2,
-        },
-        0,
-      );
+      tl.to(image, { y: influence * (speed + offset) }, 0);
     });
 
-    tl.to(
-      titleText.current,
-      {
-        y: influence * (4 + offset),
-        duration: 2,
-      },
-      0,
-    );
+    tl.to(titleText.current, { y: influence * (4 + offset) }, 0);
 
-    return () => {};
+    return () => {
+      tl.kill();
+    };
   }, [influence, offset]);
 
   function getImage(key: string) {
@@ -76,7 +69,16 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
 
   return (
     <main className="">
-      <SmoothScroll>
+      <SmoothScroll
+        options={{
+          smoothTouch: true,
+          easing: easeOutQuart,
+          duration: 1.5,
+          wheelMultiplier: 1,
+          touchMultiplier: 1,
+          touchInertiaMultiplier: 20,
+        }}
+      >
         <div ref={wrapper} className={"relative h-[75vh] w-full lg:h-[calc(100vh+80px)]"}>
           {getImages().map(({ key, speed }) => (
             <img
@@ -95,8 +97,8 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
             ref={titleText}
             className={"absolute top-0 -z-20 flex h-[50vh] w-full flex-col items-center justify-center text-center"}
           >
-            <h1 className={"text-3xl font-bold uppercase tracking-widest text-[#1D2217]"}>The Children</h1>
-            <h1 className={"text-2xl uppercase tracking-widest text-[#1D2217]"}>of Light</h1>
+            <h1 className={"text-3xl font-bold uppercase tracking-widest text-[#1D2217]"}>Parallax</h1>
+            <h1 className={"text-2xl uppercase tracking-widest text-[#1D2217]"}>16 layers</h1>
           </div>
         </div>
         <div className={"relative h-screen bg-[#060705]"}>
