@@ -1,39 +1,96 @@
-import { useState } from "react";
-import MagneticButton from "./components/magnetic-button";
-import { Vector2D } from "./lib/linear-algebra/vectors";
+import { useGSAP } from "@gsap/react";
+import gsap, { Power4 } from "gsap";
+import { MouseEventHandler, useRef } from "react";
+import { Link } from "react-router-dom";
 import { cn } from "./lib/tailwind/utils";
-import { useNavigate } from "react-router-dom";
+import magnetImg from "/src/assets/images/magnet-thumbnail.png";
+import parallaxImg from "/src/assets/images/parallax-sky-full.png";
+import { getRelativeCursorPos } from "./lib/linear-algebra/vectors";
+
+const options = [
+  {
+    id: 1,
+    text: "Parallax",
+    path: "/parallax",
+    image: parallaxImg,
+    dark: false,
+  },
+  {
+    id: 2,
+    text: "Magnet",
+    path: "/magnet",
+    image: magnetImg,
+    dark: true,
+  },
+];
 
 export default function App() {
-  const [debug, setDebug] = useState(Vector2D.of(0, 0));
-  const [isBgActive, setIsBgActive] = useState(false);
-  const navigate = useNavigate();
+  const projects = useRef<HTMLDivElement>(null);
+  const pageWrapper = useRef<HTMLDivElement>(null);
 
-  function handleClick() {
-    navigate("/parallax");
-  }
+  useGSAP(
+    () => {
+      const tl = gsap.timeline({ defaults: { duration: 2, ease: Power4.easeOut, stagger: 0.2 } });
+
+      tl.from(
+        ".bgimage-overlay",
+        {
+          width: "100%",
+        },
+        0,
+      ).from(
+        ".bgimage",
+        {
+          scale: 1.4,
+        },
+        0,
+      );
+    },
+    { scope: projects },
+  );
+
+  const handleMouseMove: MouseEventHandler<HTMLDivElement> = (event) => {
+    if (pageWrapper.current) {
+      const bgImages = pageWrapper.current.querySelectorAll(".bgimage");
+      bgImages.forEach((image) => {
+        const cursor = getRelativeCursorPos({ x: event.clientX, y: event.clientY }, image);
+        gsap.to(".bgimage", {
+          x: cursor.x * -5,
+          y: cursor.y * -5,
+          ease: Power4.easeOut,
+          duration: 2,
+        });
+      });
+    }
+  };
 
   return (
-    <main className={cn("relative transition-colors duration-500", isBgActive ? "bg-[#0b1104]" : "bg-black")}>
-      <div className={"absolute flex flex-col p-4"}>
-        <span className={"block"}>x: {debug.x.toFixed(2)}</span>
-        <span className={"block"}>y: {debug.y.toFixed(2)}</span>
-        <span className={"block"}>r: {debug.getMagnitude().toFixed(2)}</span>
-      </div>
-      <div className={"flex h-screen w-screen items-center justify-center"}>
-        <MagneticButton
-          onDebugChange={setDebug}
-          onMouseMove={() => setIsBgActive(true)}
-          onMouseLeave={() => setIsBgActive(false)}
-          onClick={handleClick}
-          classNames={{
-            button:
-              "bg-lime-500 shadow-lime-800 shadow-[0_0_64px_0px] hover:shadow-[0_0_128px_30px] hover:shadow-lime-800 transition-shadow h-60 w-60",
-            text: "text-white",
-          }}
-        >
-          Activate Parallax
-        </MagneticButton>
+    <main className={"h-screen bg-black transition-colors duration-500"}>
+      <div ref={pageWrapper} className={"h-[100%]"} onMouseMove={handleMouseMove}>
+        <div className={"flex h-[30%] flex-col justify-center p-8 md:p-16 lg:h-[40%] lg:justify-end lg:gap-2 lg:p-32"}>
+          <h1 className={"w-max text-xl font-bold uppercase tracking-widest text-[#fff] lg:text-3xl"}>
+            React Motion Design
+          </h1>
+          <Link to={"https://github.com/ianczm"} className={"text-md w-max uppercase tracking-widest"}>
+            github.com/ianczm
+          </Link>
+        </div>
+        <div ref={projects} className={"grid h-[70%] grid-rows-2 lg:h-[60%] lg:grid-cols-2 lg:grid-rows-none"}>
+          {options.map((option) => (
+            <Link key={option.id} to={option.path} className={"relative block h-full overflow-hidden"}>
+              <div className={"bgimage-overlay absolute bottom-0 left-0 top-0 z-10 w-0 bg-black"}></div>
+              <div
+                className={"bgimage absolute bottom-0 left-0 right-0 top-0 scale-110 bg-cover bg-center p-16"}
+                style={{ backgroundImage: `url(${option.image})` }}
+              ></div>
+              <div
+                className={"absolute bottom-0 left-0 right-0 top-0 flex items-end justify-start p-8 md:p-16 lg:p-32"}
+              >
+                <h2 className={cn("text-xl font-bold", option.dark ? "text-white" : "text-black")}>{option.text}</h2>
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </main>
   );

@@ -32,3 +32,13 @@ export function getNormalizedDistanceFromCenter2D(
   const y = getNormalizedDistanceFromCenter1D(cursor.y, { pos: parent.y, width: parent.height });
   return Vector2D.of(x, y);
 }
+
+export function getRelativeCursorPos(cursor: { x: number; y: number }, parent: HTMLElement | Element) {
+  const bounds = parent?.getBoundingClientRect();
+  return getNormalizedDistanceFromCenter2D(cursor, {
+    x: bounds.left,
+    y: bounds.top,
+    width: bounds.width,
+    height: bounds.height,
+  });
+}

@@ -2,8 +2,8 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useEffect, useRef } from "react";
 import { easeOutQuart } from "../lib/easings/easings";
-import { cn } from "../lib/tailwind/utils";
-import SmoothScroll from "../providers/SmoothScroll";
+import { cn, getImageHref } from "../lib/tailwind/utils";
+import SmoothScroll from "../providers/smooth-scroll";
 
 const imageMap = {
   "00": -12,
@@ -63,10 +63,6 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
     };
   }, [influence, offset]);
 
-  function getImage(key: string) {
-    return new URL(`/src/assets/images/parallax-sky-${key}.png`, import.meta.url).href;
-  }
-
   return (
     <main className="">
       <SmoothScroll
@@ -89,7 +85,7 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
               )}
               key={key}
               alt="Parallax images"
-              src={getImage(key)}
+              src={getImageHref(`parallax-sky-${key}.png`)}
               data-speed={speed}
             />
           ))}
@@ -98,7 +94,7 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
             className={"absolute top-0 -z-20 flex h-[50vh] w-full flex-col items-center justify-center text-center"}
           >
             <h1 className={"text-3xl font-bold uppercase tracking-widest text-[#1D2217]"}>Parallax</h1>
-            <h1 className={"text-2xl uppercase tracking-widest text-[#1D2217]"}>16 layers</h1>
+            <h2 className={"text-2xl uppercase tracking-widest text-[#1D2217]"}>16 layers</h2>
           </div>
         </div>
         <div className={"relative h-screen bg-[#060705]"}>
