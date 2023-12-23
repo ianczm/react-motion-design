@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import ErrorPage from "./pages/error";
-import Parallax from "./pages/parallax";
+import ParallaxPage from "./pages/parallax-page";
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +11,6 @@ export const router = createBrowserRouter([
   },
   {
     path: "/parallax",
-    element: <Parallax influence={40} offset={8} />,
+    element: <ParallaxPage influence={40} offset={8} />,
   },
 ]);
