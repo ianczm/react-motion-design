@@ -3,6 +3,7 @@ import App from "./App";
 import ErrorPage from "./pages/error";
 import ParallaxPage from "./pages/parallax-page";
 import MagneticButtonPage from "./pages/magnetic-button-page";
+import SplinePage from "./pages/spline-page";
 
 export const router = createBrowserRouter([
   {
@@ -17,5 +18,9 @@ export const router = createBrowserRouter([
   {
     path: "/parallax",
     element: <ParallaxPage influence={40} offset={8} />,
+  },
+  {
+    path: "/spline",
+    element: <SplinePage />,
   },
 ]);
