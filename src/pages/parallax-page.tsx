@@ -1,7 +1,6 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/all";
 import { useEffect, useRef } from "react";
-import { easeOutQuart } from "../lib/easings/easings";
 import { cn, getImageHref } from "../lib/tailwind/utils";
 import SmoothScroll from "../providers/smooth-scroll";
 
@@ -65,16 +64,7 @@ export default function ParallaxPage({ influence, offset }: Readonly<{ influence
 
   return (
     <main className="">
-      <SmoothScroll
-        options={{
-          smoothTouch: true,
-          // easing: easeOutQuart,
-          // duration: 1.5,
-          // wheelMultiplier: 1,
-          // touchMultiplier: 1,
-          // touchInertiaMultiplier: 20,
-        }}
-      >
+      <SmoothScroll options={{ smoothTouch: true }}>
         <div ref={wrapper} className={"relative h-[75vh] w-full lg:h-[calc(100vh+80px)]"}>
           {getImages().map(({ key, speed }) => (
             <img
