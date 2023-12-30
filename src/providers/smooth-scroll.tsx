@@ -2,7 +2,7 @@ import { ReactLenis, ReactLenisOptions } from "@studio-freight/react-lenis";
 
 type SmoothScrollProps = {
   root?: boolean;
-  options?: ReactLenisOptions & { wheelMultiplier: number; touchMultiplier: number };
+  options?: ReactLenisOptions & { wheelMultiplier?: number; touchMultiplier?: number };
   autoRaf?: boolean;
   rafPriority?: number;
   className?: string;
