@@ -1,40 +1,16 @@
 import { useGSAP } from "@gsap/react";
+import { MousePosition, useMouse } from "@uidotdev/usehooks";
 import gsap, { Power4 } from "gsap";
-import { MouseEventHandler, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { getRelativeCursorPos } from "./lib/linear-algebra/vectors";
 import { cn } from "./lib/tailwind/utils";
 import SmoothScroll from "./providers/smooth-scroll";
-import magnetImg from "/src/assets/images/magnet-thumbnail.png";
-import parallaxImg from "/src/assets/images/parallax-sky-full.png";
-
-const options = [
-  {
-    id: 1,
-    text: "Parallax",
-    path: "/parallax",
-    image: parallaxImg,
-    dark: false,
-  },
-  {
-    id: 2,
-    text: "Magnet",
-    path: "/magnet",
-    image: magnetImg,
-    dark: true,
-  },
-  {
-    id: 3,
-    text: "Spline 3D",
-    path: "/spline",
-    image: magnetImg,
-    dark: true,
-  },
-];
+import { routes } from "./router/routes";
 
 export default function App() {
   const projects = useRef<HTMLDivElement>(null);
-  const pageWrapper = useRef<HTMLDivElement>(null);
+  const [mouse, pageWrapper] = useMouse<HTMLDivElement>();
 
   useGSAP(
     () => {
@@ -57,26 +33,33 @@ export default function App() {
     { scope: projects },
   );
 
-  const handleMouseMove: MouseEventHandler<HTMLDivElement> = (event) => {
-    const factor = 2;
-    if (pageWrapper.current) {
-      const bgImages = pageWrapper.current.querySelectorAll(".bgimage");
-      bgImages.forEach((image) => {
-        const cursor = getRelativeCursorPos({ x: event.clientX, y: event.clientY }, image);
-        gsap.to(".bgimage", {
-          x: cursor.x * -factor,
-          y: cursor.y * -factor,
-          ease: Power4.easeOut,
-          duration: 2,
+  const handleMouseMove = useCallback(
+    (mouse: MousePosition) => {
+      const factor = 2;
+      if (pageWrapper.current) {
+        const bgImages = pageWrapper.current.querySelectorAll(".bgimage");
+        bgImages.forEach((image) => {
+          const cursor = getRelativeCursorPos({ x: mouse.x, y: mouse.y }, image);
+          gsap.to(".bgimage", {
+            x: cursor.x * -factor,
+            y: cursor.y * -factor,
+            ease: Power4.easeOut,
+            duration: 2,
+          });
         });
-      });
-    }
-  };
+      }
+    },
+    [pageWrapper],
+  );
+
+  useEffect(() => {
+    handleMouseMove(mouse);
+  }, [mouse, handleMouseMove]);
 
   return (
-    <SmoothScroll options={{ smoothTouch: true }}>
+    <SmoothScroll>
       <main className={"bg-black transition-colors duration-500"}>
-        <div ref={pageWrapper} onMouseMove={handleMouseMove}>
+        <div ref={pageWrapper}>
           <div
             className={"flex h-[30%] flex-col justify-center p-8 md:p-16 lg:h-[40%] lg:justify-end lg:gap-2 lg:p-32"}
           >
@@ -87,12 +70,9 @@ export default function App() {
               github.com/ianczm
             </Link>
           </div>
-          <div
-            ref={projects}
-            className={`grid grid-rows-${options.length} lg:grid-cols-${options.length} h-[1000px] lg:grid-rows-none`}
-          >
-            {options.map((option) => (
-              <Link key={option.id} to={option.path} className={"relative block h-full overflow-hidden"}>
+          <div ref={projects} className={`grid h-[1000px] lg:grid-cols-2`}>
+            {routes.map((option) => (
+              <Link key={option.id} to={option.path ?? "/"} className={"relative block h-full overflow-hidden"}>
                 <div className={"bgimage-overlay absolute bottom-0 left-0 top-0 z-10 w-0 bg-black"}></div>
                 <div
                   className={"bgimage absolute bottom-0 left-0 right-0 top-0 scale-110 bg-cover bg-center p-16"}
