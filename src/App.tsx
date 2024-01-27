@@ -17,13 +17,13 @@ export default function App() {
       const tl = gsap.timeline({ defaults: { duration: 2, ease: Power4.easeOut, stagger: 0.2 } });
 
       tl.from(
-        ".bgimage-overlay",
+        ".gsap-bgimage-overlay",
         {
           width: "100%",
         },
         0,
       ).from(
-        ".bgimage",
+        ".gsap-bgimage",
         {
           scale: 1.4,
         },
@@ -37,10 +37,10 @@ export default function App() {
     (mouse: MousePosition) => {
       const factor = 2;
       if (pageWrapper.current) {
-        const bgImages = pageWrapper.current.querySelectorAll(".bgimage");
+        const bgImages = pageWrapper.current.querySelectorAll(".gsap-bgimage");
         bgImages.forEach((image) => {
           const cursor = getRelativeCursorPos({ x: mouse.x, y: mouse.y }, image);
-          gsap.to(".bgimage", {
+          gsap.to(".gsap-bgimage", {
             x: cursor.x * -factor,
             y: cursor.y * -factor,
             ease: Power4.easeOut,
@@ -61,7 +61,9 @@ export default function App() {
       <main className={"bg-black transition-colors duration-500"}>
         <div ref={pageWrapper}>
           <div
-            className={"flex h-[30%] flex-col justify-center p-8 md:p-16 lg:h-[40%] lg:justify-end lg:gap-2 lg:p-32"}
+            className={
+              "flex h-[30%] flex-col justify-center p-8 md:p-16 lg:h-[40%] lg:justify-end lg:gap-2 lg:px-16 lg:py-32"
+            }
           >
             <h1 className={"w-max text-xl font-bold uppercase tracking-widest text-[#fff] lg:text-3xl"}>
               React Motion Design
@@ -70,17 +72,17 @@ export default function App() {
               github.com/ianczm
             </Link>
           </div>
-          <div ref={projects} className={`grid h-[1000px] lg:grid-cols-2`}>
+          <div ref={projects} className={`grid h-[1440px] lg:grid-cols-2`}>
             {routes.map((option) => (
               <Link key={option.id} to={option.path ?? "/"} className={"relative block h-full overflow-hidden"}>
-                <div className={"bgimage-overlay absolute bottom-0 left-0 top-0 z-10 w-0 bg-black"}></div>
+                <div className={"gsap-bgimage-overlay absolute bottom-0 left-0 top-0 z-10 w-0 bg-black"}></div>
                 <div
-                  className={"bgimage absolute bottom-0 left-0 right-0 top-0 scale-110 bg-cover bg-center p-16"}
+                  className={
+                    "gsap-bgimage absolute bottom-0 left-0 right-0 top-0 scale-110 bg-slate-950 bg-cover bg-center p-16"
+                  }
                   style={{ backgroundImage: `url(${option.image})` }}
                 ></div>
-                <div
-                  className={"absolute bottom-0 left-0 right-0 top-0 flex items-end justify-start p-8 md:p-16 lg:p-32"}
-                >
+                <div className={"absolute bottom-0 left-0 right-0 top-0 flex items-end justify-start p-8 md:p-16"}>
                   <h2 className={cn("text-xl font-bold", option.dark ? "text-white" : "text-black")}>{option.text}</h2>
                 </div>
               </Link>
