@@ -11,6 +11,29 @@ export class Vector2D {
     this.y = y;
   }
 
+  midpoint(v: Vector2D) {
+    return Vector2D.of((this.x + v.x) / 2, (this.y + v.y) / 2);
+  }
+
+  add(v: Vector2D) {
+    return Vector2D.of(this.x + v.x, this.y + v.y);
+  }
+
+  subtract(v: Vector2D) {
+    return Vector2D.of(this.x - v.x, this.y - v.y);
+  }
+
+  inspect() {
+    return {
+      angle: this.getAngle(),
+      magnitude: this.getMagnitude(),
+    };
+  }
+
+  getAngle() {
+    return Math.atan(this.y / this.x);
+  }
+
   getMagnitude() {
     const x = this.x;
     const y = this.y;
