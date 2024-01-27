@@ -3,12 +3,13 @@ import MagneticButtonPage from "../pages/magnetic-button-page";
 import ParallaxPage from "../pages/parallax-page";
 import SplineCubePage from "../pages/spline-cube-page/spline-cube-page";
 import SplinePage from "../pages/spline-page";
+import DockingInterfacePage from "../pages/docking-interface/docking-interface-page";
 
 import cubeImg from "/src/assets/images/thumbnails/blocks-thumbnail.png";
 import magnetImg from "/src/assets/images/thumbnails/magnet-thumbnail.png";
 import parallaxImg from "/src/assets/images/thumbnails/parallax-sky-full.png";
 import splineImg from "/src/assets/images/thumbnails/spline-thumbnail.png";
-import DockingInterfacePage from "../pages/docking-interface/docking-interface-page";
+import dockingImg from "/src/assets/images/thumbnails/docking.png";
 
 type ExtendedRouteObject = RouteObject & {
   text?: string;
@@ -54,6 +55,7 @@ export const routes: ExtendedRouteObject[] = [
     path: "/docking",
     text: "Docking",
     element: <DockingInterfacePage />,
+    image: dockingImg,
     dark: true,
   },
 ];

@@ -15,12 +15,12 @@ type StylesCollection = { [styleName: string]: Styles };
 
 const baseStyles: StylesCollection = {
   primary: {
-    outline: "outline-red-300",
-    bg: "bg-red-300",
+    outline: "outline-rose-300",
+    bg: "bg-rose-300",
   },
   success: {
-    outline: "outline-green-300",
-    bg: "bg-green-300",
+    outline: "outline-lime-300",
+    bg: "bg-lime-300",
   },
   subtract: {
     outline: "bg-black",
@@ -106,7 +106,14 @@ export default function DockingInterfacePage() {
   }
 
   return (
-    <div className={"relative flex h-screen w-screen items-center justify-center overflow-hidden"}>
+    <div
+      className={cn(
+        "relative flex h-screen w-screen items-center justify-center overflow-hidden transition-colors duration-300 ease-in-out",
+        {
+          "bg-[#0b1104]": isCentered,
+        },
+      )}
+    >
       {/* Cursor */}
       <Dot className={"gsap-cursor absolute left-1/2 top-1/2 h-16 w-16"} styles={getStyles()} />
       {/* Main */}
